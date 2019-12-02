@@ -80,8 +80,8 @@ f = open('test.txt', 'w')
 
 # try:
 Agents = ["A", "B", "C", "D", "E", "F", "G", "H", "I","J"]  # 表示机器人
-startX = [0, 4, 0, 0, 5, 10, 0, 15, 3, 20]  # Ｘ轴坐标
-startY = [0, 1, 1, 2, 2, 7, 10, 8, 5, 8]
+startX = [0, 1, 0, 0, 5, 10, 0, 15, 3, 20]  # Ｘ轴坐标
+startY = [0, 0, 1, 2, 2, 7, 10, 8, 5, 8]
 
 endX = [28, 28, 27, 26, 25, 24, 23, 25, 24, 20]
 endY = [28, 27, 28, 26, 28, 28, 28, 27, 27, 28]
@@ -212,7 +212,7 @@ while isSat == unsat and a < len(Agents):
                     # 一个ａｇｅｎｔ当前时间所在的位置不能是其他ａｇｅｎｔ下一时间所在的位置
                     s.add(Not(Bool("t" + str(int(arr[n][0]) + 1) + "_" + Agents[a] + "_x" + str(arr[n][1]) + "_y" + str(
                         arr[n][2]))))
-                    if a >= 1 and int(arr[n][0]) >=1:#
+                    if int(arr[n][0]) >1:#
                         s.add(Not(Bool(
                             "t" + str(int(arr[n][0]) - 1) + "_" + Agents[a] + "_x" + str(arr[n][1]) + "_y" + str(
                                 arr[n][2]))))
