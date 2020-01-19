@@ -10,44 +10,70 @@ import numpy
 
 solver1 = Solver()
 # －－－－－－－－－－－－－－－－－－－－－－－－测试数据１_10x10－－－－－－－－－－－－－－－－－－－－－
-pathImg = [
-    [0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
-    [0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 0, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 0, 1, 1, 1, 0, 1, 1, 1, 1],
-    [1, 0, 0, 0, 0, 1, 0, 1, 1, 1],
-    [1, 0, 0, 0, 0, 1, 0, 1, 1, 1],
-    [1, 1, 1, 1, 0, 0, 0, 1, 1, 1],
-    [1, 1, 1, 1, 0, 0, 0, 0, 1, 1],
-    [1, 1, 1, 1, 1, 1, 0, 0, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 0, 0, 0]
-]
-Agents = ["A","B","C","D","E"]
-startX = [0, 1,1,0,2]  # Ｘ轴坐标
-startY = [0, 0,1,1,1]
-
-endX = [8,9,9,7,8]
-endY = [8,9,8,7,7]
+# pathImg = [
+#     [0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+#     [0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+#     [1, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+#     [1, 0, 1, 1, 1, 0, 1, 1, 1, 1],
+#     [1, 0, 0, 0, 0, 1, 0, 1, 1, 1],
+#     [1, 0, 0, 0, 0, 1, 0, 1, 1, 1],
+#     [1, 1, 1, 1, 0, 0, 0, 1, 1, 1],
+#     [1, 1, 1, 1, 0, 0, 0, 0, 1, 1],
+#     [1, 1, 1, 1, 1, 1, 0, 0, 0, 1],
+#     [1, 1, 1, 1, 1, 1, 1, 0, 0, 0]
+# ]
+# Agents = ["A","B","C","D","E"]
+# startX = [0, 1,1,0,2]  # Ｘ轴坐标
+# startY = [0, 0,1,1,1]
+#
+# endX = [8,9,9,7,8]
+# endY = [8,9,8,7,7]
 # ---------------------------------------------------------------------------------
-# －－－－－－－－－－－－－－－－－－－－－－－－测试数据２_８x８－－－－－－－－－－－－－－－－－－－－－
-pathImg = [
-    [0, 0, 1, 1, 1, 1, 1, 1],
-    [0, 0, 1, 1, 1, 1, 1, 1],
-    [1, 0, 1, 1, 1, 1, 1, 1],
-    [1, 0, 1, 1, 1, 0, 1, 1],
-    [1, 0, 0, 0, 0, 1, 0, 1],
-    [1, 0, 0, 0, 0, 1, 0, 1],
-    [1, 1, 1, 1, 0, 0, 0, 1],
-    [1, 1, 1, 1, 0, 0, 0, 0]
-]
-Agents = ["A","B","C","D","E"]
-startX = [0, 1,1,0,2]  # Ｘ轴坐标
-startY = [0, 0,1,1,1]
-
-endX = [5,7,7,7,7]
-endY = [1,4,5,6,7]
+# －－－－－－－－－－－－－－－－－－－－－－－－测试数据１_10x10－－－－－－－－－－－－－－－－－－－－－
+# pathImg = [
+#     [0, 0, 1, 1, 1, 1, 1, 1],
+#     [0, 0, 1, 1, 1, 1, 1, 1],
+#     [1, 0, 1, 1, 1, 1, 1, 1],
+#     [1, 0, 1, 1, 1, 0, 1, 1],
+#     [1, 0, 0, 0, 0, 1, 0, 1],
+#     [1, 0, 0, 0, 0, 1, 0, 1],
+#     [1, 1, 1, 1, 0, 0, 0, 1],
+#     [1, 1, 1, 1, 0, 0, 0, 0]
+# ]
+# Agents = ["A","B","C","D","E"]
+# startX = [0, 1,1,0,2]  # Ｘ轴坐标
+# startY = [0, 0,1,1,1]
+#
+# endX = [5,7,7,7,7]
+# endY = [1,4,5,6,7]
 # ---------------------------------------------------------------------------------
-# －－－－－－－－－－－－－－－－－－－－－－－－测试数据３_29x29－－－－－－－－－－－－－－－－－－－－
+pathImg = []
+for x in range(18):
+    pathImg2 = []
+    for y in range(18):
+        pathImg2.append(0)
+    pathImg.append(pathImg2)
+
+Agents = []
+startX = []  # Ｘ轴坐标
+startY = []
+endX = []
+endY = []
+
+for agt in range(18):
+    Agents.append("A"+str(agt))
+    startX.append(0)
+    startY.append(agt)
+    endX.append(16)
+    endY.append(agt)
+
+    Agents.append("B"+str(agt))
+    startX.append(1)
+    startY.append(agt)
+    endX.append(17)
+    endY.append(agt)
+
+# －－－－－－－－－－－－－－－－－－－－－－－－测试数据3_29x29－－－－－－－－－－－－－－－－－－－－
 
 # pathImg = [
 #     [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -88,6 +114,90 @@ endY = [1,4,5,6,7]
 # endY = [28, 27, 28, 26, 28]
 
 # －－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+# －－－－－－－－－－－－－－－－－－－－－测试数据３－－－－－－－－－－－－－－－－－－－－－－－－－－－
+
+# import numpy as np
+# f = open(r"ost003d.map")
+# line = f.readline()
+# data_list = []
+# while line:
+#     num = list(map(str,line.split()))
+#     data_list.append(num)
+#     line = f.readline()
+# f.close()
+# pathImg = np.array(data_list)
+#
+# Agents = ["A"]  # 表示机器人
+# startX = [143, 1, 0, 0, 5]  # Ｘ轴坐标
+# startY = [40, 0, 1, 2, 2]
+#
+# endX = [191, 28, 27, 26, 25]
+# endY = [111, 27, 28, 26, 28]
+# －－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+# pathImg = []
+# for p in range(64):
+#     W = []
+#     for q in range(64):
+#         W.append(0)
+#     pathImg.append(W)
+#
+# Agents = []
+# startX = []
+# startY = []
+# endX = []
+# endY = []
+# rows = len(pathImg)     #行数
+# cols = len(pathImg[0])  #列数
+# for v in range(200):
+#     Agents.append("A"+str(v))
+#
+# for x in range(54):
+#     for y in range(54):
+#         if(x % 4 == 0 and y % 3 == 0):
+#             startX.append(x)
+#             startY.append(y)
+#             endX.append(rows-x)
+#             endY.append(cols-y)
+# －－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+# －－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+pathImg = []
+for x in range(3):
+    pathImg2 = []
+    for y in range(3):
+        pathImg2.append(0)
+    pathImg.append(pathImg2)
+
+Agents = []
+startX = []  # Ｘ轴坐标
+startY = []
+endX = []
+endY = []
+
+for agt in range(3):
+    Agents.append("A"+str(agt))
+    startX.append(0)
+    startY.append(agt)
+    endX.append(0)
+    endY.append(agt)
+
+    Agents.append("B"+str(agt))
+    startX.append(1)
+    startY.append(agt)
+    endX.append(1)
+    endY.append(agt)
+
+for agt in range(2):
+    Agents.append("C"+str(agt))
+    startX.append(2)
+    startY.append(agt)
+    endX.append(2)
+    endY.append(agt)
+
+endX[0] = 2
+endY[0] = 2
+
+# －－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+
 
 rows = len(pathImg)     #行数
 cols = len(pathImg[0])  #列数
@@ -125,7 +235,7 @@ for agt in range(agentsNum):
         if(startX[agt] == startX[agt2] and startY[agt] == startY[agt2]):
             print "Agent",Agents[agt],"与Agent",Agents[agt2],"所在起点冲突"
             exit()
-        if(endX[agt] == endX[agt2] and endY[agt] == endX[agt2]):
+        if(endX[agt] == endX[agt2] and endY[agt] == endY[agt2]):
             print "Agent",Agents[agt],"与Agent",Agents[agt2],"所在终点冲突"
             exit()
 
@@ -220,7 +330,7 @@ style1 = xlwt.easyxf('pattern: pattern solid, fore_colour black;')
 style2 = xlwt.easyxf('pattern: pattern solid, fore_colour white;')
 for i in range(rows):
     for j in range(cols):
-        if (pathImg[i][j] == 1):
+        if (pathImg[i][j] != VECTEX):
             newSheet.write(i, j, 1, style1)
         else:
             newSheet.write(i, j, pathPlan[i][j], style2)
