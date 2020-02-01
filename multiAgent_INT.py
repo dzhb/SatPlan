@@ -26,11 +26,22 @@ pathImgOri = [
 Agents = ["A", "B", "C", "D", "E"]
 # Agents = ["A", "B", "C", "D", "E","F","G","H","I","J","K","L","M","N","O"]
 # Agents = ["A","B"]
-startX = [0, 1, 1, 0, 2, 3, 4, 4, 8, 9,9,7,8,8,9]  # Ｘ轴坐标
-startY = [0, 0, 1, 1, 1, 1, 1, 2, 8, 9,8,7,7,6,7]
+# Agents = ["A"]
+# startX = [0, 1, 1, 0, 2, 3, 4, 4, 8, 9,9,7,8,8,9]  # Ｘ轴坐标
+# startY = [0, 0, 1, 1, 1, 1, 1, 2, 8, 9,8,7,7,6,7]
+#
+# endX = [8, 9, 9, 7, 8, 8, 9, 6, 0, 1,1,0,2,3,4]
+# endY = [8, 9, 8, 7, 7, 6, 7, 6, 0, 0,1,1,1,1,1]
 
-endX = [8, 9, 9, 7, 8, 8, 9, 6, 0, 1,1,0,2,3,4]
-endY = [8, 9, 8, 7, 7, 6, 7, 6, 0, 0,1,1,1,1,1]
+startVertexs = [(0, 0), (1, 0), (1, 1), (0, 1), (2, 1),
+                (3, 1), (4, 1), (4, 2), (8, 8), (9, 9),
+                (9, 8), (7, 7), (8, 7),(8, 6), (9, 7)]
+endVertexs = [(8, 8), (9, 9), (9, 8), (7, 7), (8, 7),
+              (8, 6), (9, 7), (6, 6), (0, 0), (1, 0),
+              (1, 1), (0, 1), (2, 1), (3, 1), (4, 1)]
+
+
+
 # -------------------------------------------------------------------
 # pathImgOri = [
 #     [0, 0, 1, 1, 1, 1, 1, 1],
@@ -125,6 +136,17 @@ endY = [8, 9, 8, 7, 7, 6, 7, 6, 0, 0,1,1,1,1,1]
 # endY[0] = 2
 # -----------------------------------------------
 
+startX = []
+startY = []
+endX = []
+endY = []
+
+for agt in range(len(Agents)):
+    startX.append(startVertexs[agt][0])
+    startY.append(startVertexs[agt][1])
+    endX.append(endVertexs[agt][0])
+    endY.append(endVertexs[agt][1])
+
 pathImg =[[1 for mm in range(len(pathImgOri[0])+2)] for nn in range(len(pathImgOri)+2)]
 for x in range(len(pathImgOri)):
     for y in range(len(pathImgOri[0])):
@@ -195,16 +217,32 @@ for agt in range(agentsNum):
             print "Agent", Agents[agt], "与Agent", Agents[agt2], "所在终点冲突"
             exit()
 
-graph = []
-for x in range(len(pathImg)):
-    for y in range(len(pathImg[0])):
-        if pathImg[x][y] == 0:
-            # solver.add(Int(str(Agents[agt] + "_t" + str(timeStep+1))) != x * rows + y) # agent不能在有障碍物的位置
-            # constraintArr_graph.append(Int(str(Agents[agt] + "_t" + str(timeStep + 1))) == x * rows + y)
-            p = [x, y]
-            graph.append(p)
+# graph = []
+# for x in range(len(pathImg)):
+#     for y in range(len(pathImg[0])):
+#         if pathImg[x][y] == 0:
+#             # solver.add(Int(str(Agents[agt] + "_t" + str(timeStep+1))) != x * rows + y) # agent不能在有障碍物的位置
+#             # constraintArr_graph.append(Int(str(Agents[agt] + "_t" + str(timeStep + 1))) == x * rows + y)
+#             p = [x, y]
+#             graph.append(p)
 
+# 获取agent在timsStep时刻下的最大移动范围
+def getRange(timeStep,startVertex):
+    timeStep = timeStep + 1
+    x = startVertex[0]
+    y = startVertex[1]
+    range_x = [x - timeStep, x + timeStep]
+    range_y = [y - timeStep, y + timeStep]
+    if range_x[0] < 0:
+        range_x[0] = 0
+    if range_y[0] < 0:
+        range_y[0] = 0
+    if range_x[1] > rows:
+        range_x[1] = rows
+    if range_y[1] > cols:
+        range_y[1] = cols
 
+    return [range_x,range_y]
 
 
 while isSat == unsat:
@@ -231,14 +269,15 @@ while isSat == unsat:
         solver.add(next >= 0)
 
         constraintArr_graph = []
-        # for x in range(len(pathImg)):
-        #     for y in range(len(pathImg[0])):
-        #         if pathImg[x][y] == 0:
-        #             # solver.add(Int(str(Agents[agt] + "_t" + str(timeStep+1))) != x * rows + y) # agent不能在有障碍物的位置
-        #             constraintArr_graph.append(Int(str(Agents[agt] + "_t" + str(timeStep+1))) == x * rows + y)
-        for g in range(len(graph)):
-            constraintArr_graph.append(
-                Int(str(Agents[agt] + "_t" + str(timeStep + 1))) == graph[g][0] * rows + (graph[g][1]))
+        currentRange = getRange(timeStep+1, startVertexs[agt])
+        for x in range(currentRange[0][0],currentRange[0][1]):
+            for y in range(currentRange[1][0],currentRange[1][1]):
+                if pathImg[x][y] == 0:
+                    # solver.add(Int(str(Agents[agt] + "_t" + str(timeStep+1))) != x * rows + y) # agent不能在有障碍物的位置
+                    constraintArr_graph.append(Int(str(Agents[agt] + "_t" + str(timeStep+1))) == x * rows + y)
+        # for g in range(len(graph)):
+        #     constraintArr_graph.append(
+        #         Int(str(Agents[agt] + "_t" + str(timeStep + 1))) == graph[g][0] * rows + (graph[g][1]))
         solver.add(Or(constraintArr_graph))
 
 
