@@ -30,14 +30,16 @@ pathImg = [
 # for x in range(10):
 #     for y in range(10):
 #         pathImg[x][y] = 0
-# Agents = ["A", "B", "C", "D", "E"]
-Agents = ["A", "B", "C", "D", "E","F","G","H","I","J","K","L","M","N","O"]
-# Agents = ["A","B"]
+Agents = ["A", "B", "C", "D", "E"]
+# Agents = ["A", "B", "C", "D", "E","F","G","H","I","J","K","L","M","N","O"]
+# Agents = ["A","B", "C"]
 # Agents = ["A"]
 # startX = [0, 1, 1, 0, 2, 3, 4, 4, 8, 9,9,7,8,8,9]  # Ｘ轴坐标
-# startY = [0, 0, 1, 1, 1, 1, 1, 2, 8, 9,8,7,7,6,7]
+# startY = [0, 0, 1, 1, 1, 1, 1, 2, 8, 9,8,7,7,  6,7]
 # endX = [8, 9, 9, 7, 8, 8, 9, 6, 0, 1,1,0,2,3,4]
 # endY = [8, 9, 8, 7, 7, 6, 7, 6, 0, 0,1,1,1,1,1]
+
+
 
 startVertexs = [(0, 0), (1, 0), (1, 1), (0, 1), (2, 1),
                 (3, 1), (4, 1), (4, 2), (8, 8), (9, 9),
@@ -45,6 +47,24 @@ startVertexs = [(0, 0), (1, 0), (1, 1), (0, 1), (2, 1),
 endVertexs = [(8, 8), (9, 9), (9, 8), (7, 7), (8, 7),
               (8, 6), (9, 7), (6, 6), (0, 0), (1, 0),
               (1, 1), (0, 1), (2, 1), (3, 1), (4, 1)]
+
+
+
+
+# pathImg = []
+# for x in range(100):
+#     pathImg2 = []
+#     for y in range(100):
+#         pathImg2.append(0)
+#     pathImg.append(pathImg2)
+#
+# startVertexs = [(0, 0), (1, 0), (2, 1), (0, 1), (1, 1),
+#                 (3, 1), (4, 1), (4, 2), (8, 8), (9, 9),
+#                 (9, 8), (7, 7), (8, 7),(8, 6), (9, 7)]
+# endVertexs = [(99, 99), (89, 89), (88, 87), (87, 87), (89, 88),
+#               (88, 86), (89, 87), (6, 6), (0, 0), (1, 0),
+#               (1, 1), (0, 1), (2, 1), (3, 1), (4, 1)]
+
 
 startX = []
 startY = []
@@ -103,15 +123,27 @@ for agt in range(agentsNum):
             print "Agent", Agents[agt], "与Agent", Agents[agt2], "所在终点冲突"
             exit()
 
+# 获取agent在timsStep时刻下的最大移动范围
+def getRange(timeStep,startVertex):
+    timeStep = timeStep + 1
+    x = startVertex[0]
+    y = startVertex[1]
+    range_x = [x - timeStep, x + timeStep]
+    range_y = [y - timeStep, y + timeStep]
+    if range_x[0] < 0:
+        range_x[0] = 0
+    if range_y[0] < 0:
+        range_y[0] = 0
+    if range_x[1] > rows:
+        range_x[1] = rows
+    if range_y[1] > cols:
+        range_y[1] = cols
+
+    return [range_x,range_y]
+
 allPath = []
 for agt in range(len(Agents)):
     path = astar(pathImg, startVertexs[agt], endVertexs[agt])
-    # pathList = []
-    # for i in range(len(path)):
-    #     pathList.append(list(path[i]))
-    # pathExpr = []
-    # for t in range(len(path)):
-    #     pathExpr.append(Bool(str(Agents[agt])+"_t"+str(t)+"_x"+str(path[t][0]) + "_y"+str(path[t][1])))
     allPath.append(path)
 print "allPath:", allPath
 
@@ -184,8 +216,9 @@ for i in range(len(earlyPath_expr)):
 while isSat == unsat:
     for currentAgent in range(len(Agents)):
         if currentAgent not in earlyPathAgentList:
-            for i in range(rows):
-                for j in range(cols):
+            currentRange = getRange(timestep, startVertexs[currentAgent])
+            for i in range(currentRange[0][0],currentRange[0][1]):
+                for j in range(currentRange[1][0],currentRange[1][1]):
                     if pathImg[i][j] == 0:
                         expr_A = Bool(Agents[currentAgent] + "_t" + str(timestep) + "_x" + str(i) + "_y" + str(j))
                         expr_B = []
