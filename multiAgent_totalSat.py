@@ -6,28 +6,36 @@ import datetime
 import xlrd
 import xlwt
 import numpy
-
+from time import time
 
 solver1 = Solver()
 # －－－－－－－－－－－－－－－－－－－－－－－－测试数据１_10x10－－－－－－－－－－－－－－－－－－－－－
-# pathImg = [
-#     [0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
-#     [0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
-#     [1, 0, 1, 1, 1, 1, 1, 1, 1, 1],
-#     [1, 0, 1, 1, 1, 0, 1, 1, 1, 1],
-#     [1, 0, 0, 0, 0, 1, 0, 1, 1, 1],
-#     [1, 0, 0, 0, 0, 1, 0, 1, 1, 1],
-#     [1, 1, 1, 1, 0, 0, 0, 1, 1, 1],
-#     [1, 1, 1, 1, 0, 0, 0, 0, 1, 1],
-#     [1, 1, 1, 1, 1, 1, 0, 0, 0, 1],
-#     [1, 1, 1, 1, 1, 1, 1, 0, 0, 0]
-# ]
-# Agents = ["A","B","C","D","E"]
-# startX = [0, 1,1,0,2]  # Ｘ轴坐标
-# startY = [0, 0,1,1,1]
-#
-# endX = [8,9,9,7,8]
-# endY = [8,9,8,7,7]
+pathImg = [
+    [0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+    [0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 1, 1, 1, 0, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 1, 0, 1, 1, 1],
+    [1, 0, 0, 0, 0, 1, 0, 1, 1, 1],
+    [1, 1, 1, 1, 0, 0, 0, 1, 1, 1],
+    [1, 1, 1, 1, 0, 0, 0, 0, 1, 1],
+    [1, 1, 1, 1, 1, 1, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 0, 0, 0]
+]
+# for x in range(10):
+#     for y in range(10):
+#         pathImg[x][y] = 0
+# Agents = ["A", "B", "C", "D", "E","F","G","H","I","J","K","L","M","N","O"]
+Agents = ["A", "B", "C", "D", "E"]
+# Agents = ["A"]
+
+
+startVertexs = [(0, 0), (1, 0), (1, 1), (0, 1), (2, 1),
+                (3, 1), (4, 1), (4, 2), (8, 8), (9, 9),
+                (9, 8), (7, 7), (8, 7),(8, 6), (9, 7)]
+endVertexs = [(8, 8), (9, 9), (9, 8), (7, 7), (8, 7),
+              (8, 6), (9, 7), (6, 6), (0, 0), (1, 0),
+              (1, 1), (0, 1), (2, 1), (3, 1), (4, 1)]
 # ---------------------------------------------------------------------------------
 # －－－－－－－－－－－－－－－－－－－－－－－－测试数据１_10x10－－－－－－－－－－－－－－－－－－－－－
 # pathImg = [
@@ -47,31 +55,31 @@ solver1 = Solver()
 # endX = [5,7,7,7,7]
 # endY = [1,4,5,6,7]
 # ---------------------------------------------------------------------------------
-pathImg = []
-for x in range(18):
-    pathImg2 = []
-    for y in range(18):
-        pathImg2.append(0)
-    pathImg.append(pathImg2)
-
-Agents = []
-startX = []  # Ｘ轴坐标
-startY = []
-endX = []
-endY = []
-
-for agt in range(18):
-    Agents.append("A"+str(agt))
-    startX.append(0)
-    startY.append(agt)
-    endX.append(16)
-    endY.append(agt)
-
-    Agents.append("B"+str(agt))
-    startX.append(1)
-    startY.append(agt)
-    endX.append(17)
-    endY.append(agt)
+# pathImg = []
+# for x in range(18):
+#     pathImg2 = []
+#     for y in range(18):
+#         pathImg2.append(0)
+#     pathImg.append(pathImg2)
+#
+# Agents = []
+# startX = []  # Ｘ轴坐标
+# startY = []
+# endX = []
+# endY = []
+#
+# for agt in range(18):
+#     Agents.append("A"+str(agt))
+#     startX.append(0)
+#     startY.append(agt)
+#     endX.append(0)
+#     endY.append(agt)
+#
+#     Agents.append("B"+str(agt))
+#     startX.append(1)
+#     startY.append(agt)
+#     endX.append(17)
+#     endY.append(agt)
 
 # －－－－－－－－－－－－－－－－－－－－－－－－测试数据3_29x29－－－－－－－－－－－－－－－－－－－－
 
@@ -107,11 +115,19 @@ for agt in range(18):
 #     [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0]
 # ]
 # Agents = ["A", "B", "C", "D", "E"]  # 表示机器人
-# startX = [0, 1, 0, 0, 5]  # Ｘ轴坐标
-# startY = [0, 0, 1, 2, 2]
+# # Agents = ["A"]  # 表示机器人
+# # startX = [0, 1, 0, 1, 5]  # Ｘ轴坐标
+# # startY = [0, 0, 1, 1, 2]
+# #
+# # endX = [28, 28, 27, 26, 25]
+# # endY = [28, 27, 28, 26, 28]
 #
-# endX = [28, 28, 27, 26, 25]
-# endY = [28, 27, 28, 26, 28]
+# startVertexs = [(0, 0), (1, 0), (0, 1), (1, 1), (5, 2),
+#                 (3, 1), (4, 1), (4, 2), (8, 8), (9, 9),
+#                 (9, 8), (7, 7), (8, 7),(8, 6), (9, 7)]
+# endVertexs = [(28, 28), (28, 27), (27, 28), (26, 26), (25, 28),
+#               (88, 86), (89, 87), (6, 6), (0, 0), (1, 0),
+#               (1, 1), (0, 1), (2, 1), (3, 1), (4, 1)]
 
 # －－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
 # －－－－－－－－－－－－－－－－－－－－－测试数据３－－－－－－－－－－－－－－－－－－－－－－－－－－－
@@ -160,47 +176,73 @@ for agt in range(18):
 #             endY.append(cols-y)
 # －－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
 # －－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
-pathImg = []
-for x in range(3):
-    pathImg2 = []
-    for y in range(3):
-        pathImg2.append(0)
-    pathImg.append(pathImg2)
+# pathImg = []
+# for x in range(3):
+#     pathImg2 = []
+#     for y in range(3):
+#         pathImg2.append(0)
+#     pathImg.append(pathImg2)
+#
+# Agents = []
+# startX = []  # Ｘ轴坐标
+# startY = []
+# endX = []
+# endY = []
+#
+# for agt in range(3):
+#     Agents.append("A"+str(agt))
+#     startX.append(0)
+#     startY.append(agt)
+#     endX.append(0)
+#     endY.append(agt)
+#
+#     Agents.append("B"+str(agt))
+#     startX.append(1)
+#     startY.append(agt)
+#     endX.append(1)
+#     endY.append(agt)
+#
+# for agt in range(2):
+#     Agents.append("C"+str(agt))
+#     startX.append(2)
+#     startY.append(agt)
+#     endX.append(2)
+#     endY.append(agt)
+#
+# endX[0] = 2
+# endY[0] = 2
 
-Agents = []
-startX = []  # Ｘ轴坐标
-startY = []
-endX = []
-endY = []
-
-for agt in range(3):
-    Agents.append("A"+str(agt))
-    startX.append(0)
-    startY.append(agt)
-    endX.append(0)
-    endY.append(agt)
-
-    Agents.append("B"+str(agt))
-    startX.append(1)
-    startY.append(agt)
-    endX.append(1)
-    endY.append(agt)
-
-for agt in range(2):
-    Agents.append("C"+str(agt))
-    startX.append(2)
-    startY.append(agt)
-    endX.append(2)
-    endY.append(agt)
-
-endX[0] = 2
-endY[0] = 2
+# －－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+# －－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
+# pathImg = [
+#     [0,1,1,0],
+#     [0,0,0,0],
+#     [0,1,1,0]
+# ]
+#
+# Agents = ["S1","S2"]
+# startX = [0,2]
+# startY = [0,3]
+#
+# endX = [0,2]
+# endY = [3,0]
 
 # －－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－－
 
 
-rows = len(pathImg)     #行数
-cols = len(pathImg[0])  #列数
+startX = []
+startY = []
+endX = []
+endY = []
+
+for agt in range(len(Agents)):
+    startX.append(startVertexs[agt][0])
+    startY.append(startVertexs[agt][1])
+    endX.append(endVertexs[agt][0])
+    endY.append(endVertexs[agt][1])
+
+rows = len(pathImg)  # 行数
+cols = len(pathImg[0])  # 列数
 
 f = open('test.txt', 'w')
 
@@ -209,68 +251,98 @@ t = 0  # 记录时间
 currentAgent = 0  # 当前agent
 isSat = unsat
 constrainstsArr = []  # 约束
-starttime = datetime.datetime.now() #　计时
+starttime = time()  # 计时
 
-VECTEX = 0 #途中表示顶点的字符
+VERTEX = 0  # 途中表示顶点的字符
+
 
 # 起点终点最短距离
 def minDistance():
     min = 0
     for agt in range(agentsNum):
-        distance = int(math.sqrt(abs(math.pow((endX[agt] - startX[agt]), 2) + math.pow((endY[agt] - startY[agt]), 2)))) - 1
+        distance = int(
+            math.sqrt(abs(math.pow((endX[agt] - startX[agt]), 2) + math.pow((endY[agt] - startY[agt]), 2)))) - 1
         if min < distance:
             min = distance
     return min
 
+
 for agt in range(agentsNum):
-    if(pathImg[startX[agt]][startY[agt]] != VECTEX):
+    if (pathImg[startX[agt]][startY[agt]] != VERTEX):
         print "agent的起点不能为障碍物"
         exit()
-    if (pathImg[endX[agt]][endY[agt]] != VECTEX):
+    if (pathImg[endX[agt]][endY[agt]] != VERTEX):
         print "agent的终点不能为障碍物"
         exit()
 
 for agt in range(agentsNum):
-    for agt2 in range(agt+1,agentsNum):
-        if(startX[agt] == startX[agt2] and startY[agt] == startY[agt2]):
-            print "Agent",Agents[agt],"与Agent",Agents[agt2],"所在起点冲突"
+    for agt2 in range(agt + 1, agentsNum):
+        if (startX[agt] == startX[agt2] and startY[agt] == startY[agt2]):
+            print "Agent", Agents[agt], "与Agent", Agents[agt2], "所在起点冲突"
             exit()
-        if(endX[agt] == endX[agt2] and endY[agt] == endY[agt2]):
-            print "Agent",Agents[agt],"与Agent",Agents[agt2],"所在终点冲突"
+        if (endX[agt] == endX[agt2] and endY[agt] == endY[agt2]):
+            print "Agent", Agents[agt], "与Agent", Agents[agt2], "所在终点冲突"
             exit()
 
-# init first vectex for per agent
+# 获取agent在timsStep时刻下的最大移动范围
+def getRange(timeStep,startVertex):
+    timeStep = timeStep + 1
+    x = startVertex[0]
+    y = startVertex[1]
+    range_x = [x - timeStep, x + timeStep]
+    range_y = [y - timeStep, y + timeStep]
+    if range_x[0] < 0:
+        range_x[0] = 0
+    if range_y[0] < 0:
+        range_y[0] = 0
+    if range_x[1] > rows:
+        range_x[1] = rows
+    if range_y[1] > cols:
+        range_y[1] = cols
+
+    return [range_x,range_y]
+
+
+
+
+# init first vertex for per agent
 for p in range(len(Agents)):
     solver1.append(Bool(Agents[p] + "_t" + str(t) + "_x" + str(startX[p]) + "_y" + str(startY[p])))
 
 while isSat == unsat:
     for currentAgent in range(len(Agents)):
-        for i in range(rows):
-            for j in range(cols):
+        currentRange = getRange(t, startVertexs[currentAgent])
+        for i in range(currentRange[0][0],currentRange[0][1]):
+            for j in range(currentRange[1][0],currentRange[1][1]):
                 if pathImg[i][j] == 0:
                     expr_A = Bool(Agents[currentAgent] + "_t" + str(t) + "_x" + str(i) + "_y" + str(j))
                     expr_B = []
+                    expr_B.append(Bool(
+                        Agents[currentAgent] + "_t" + str(t + 1) + "_x" + str(i) + "_y" + str(j)))  # current vertex
                     if i >= 1 and j >= 1 and pathImg[i - 1][j - 1] == 0:  # 左上
                         expr_B.append(
                             Bool(Agents[currentAgent] + "_t" + str(t + 1) + "_x" + str(i - 1) + "_y" + str(j - 1)))
                     if j >= 1 and pathImg[i][j - 1] == 0:  # 左
-                        expr_B.append(Bool(Agents[currentAgent] + "_t" + str(t + 1) + "_x" + str(i) + "_y" + str(j - 1)))
+                        expr_B.append(
+                            Bool(Agents[currentAgent] + "_t" + str(t + 1) + "_x" + str(i) + "_y" + str(j - 1)))
                     if i <= rows - 2 and j >= 1 and pathImg[i + 1][j - 1] == 0:  # 左下
                         expr_B.append(
-                            Bool(Agents[currentAgent] + "_t" + str(t + 1) +  "_x" + str(i + 1) + "_y" + str(j - 1)))
+                            Bool(Agents[currentAgent] + "_t" + str(t + 1) + "_x" + str(i + 1) + "_y" + str(j - 1)))
                     if i >= 1 and pathImg[i - 1][j] == 0:  # 上
-                        expr_B.append(Bool(Agents[currentAgent] + "_t" + str(t + 1) + "_x" + str(i - 1) + "_y" + str(j)))
+                        expr_B.append(
+                            Bool(Agents[currentAgent] + "_t" + str(t + 1) + "_x" + str(i - 1) + "_y" + str(j)))
                     if i <= rows - 2 and pathImg[i + 1][j] == 0:  # 下
-                        expr_B.append(Bool(Agents[currentAgent] + "_t" + str(t + 1) + "_x" + str(i + 1) + "_y" + str(j)))
+                        expr_B.append(
+                            Bool(Agents[currentAgent] + "_t" + str(t + 1) + "_x" + str(i + 1) + "_y" + str(j)))
                     if i >= 1 and j <= cols - 2 and pathImg[i - 1][j + 1] == 0:  # 右上
                         expr_B.append(
                             Bool(Agents[currentAgent] + "_t" + str(t + 1) + "_x" + str(i - 1) + "_y" + str(j + 1)))
                     if j <= cols - 2 and pathImg[i][j + 1] == 0:  # 右
-                        expr_B.append(Bool(Agents[currentAgent] + "_t" + str(t + 1) + "_x" + str(i) + "_y" + str(j + 1)))
+                        expr_B.append(
+                            Bool(Agents[currentAgent] + "_t" + str(t + 1) + "_x" + str(i) + "_y" + str(j + 1)))
                     if i <= rows - 2 and j <= cols - 2 and pathImg[i + 1][j + 1] == 0:  # 右下
                         expr_B.append(
                             Bool(Agents[currentAgent] + "_t" + str(t + 1) + "_x" + str(i + 1) + "_y" + str(j + 1)))
-                    expr_B.append(Bool(Agents[currentAgent] + "_t" + str(t + 1) + "_x" + str(i) + "_y" + str(j))) #current vectex
                     solver1.add(Or(Not(expr_A), Or(expr_B)))
 
                     expr_C = []
@@ -278,13 +350,13 @@ while isSat == unsat:
                     for a1 in range(len(Agents)):
                         if a1 != currentAgent:
                             expr_C.append(Bool(Agents[a1] + "_t" + str(t) + "_x" + str(i) + "_y" + str(j)))
-                            expr_D.append(Bool(Agents[a1] + "_t" + str(t+1) + "_x" + str(i) + "_y" + str(j)))
+                            expr_D.append(Bool(Agents[a1] + "_t" + str(t + 1) + "_x" + str(i) + "_y" + str(j)))
                     # 每个位置每次只能有一个Agent
-                    solver1.add(Not(And(expr_A,Or(expr_C))))
-                    # 多个agent不能同一时间进出一个vectex
-                    solver1.add(Not(And(expr_A,Or(expr_D))))
+                    solver1.add(Not(And(expr_A, Or(expr_C))))
+                    # 多个agent不能同一时间进出一个vertex
+                    solver1.add(Not(And(expr_A, Or(expr_D))))
 
-    if t > minDistance(): # 当步骤大于图中起点和终点最近的agent
+    if t > minDistance():  # 当步骤大于图中起点和终点最近的agent
         solver1.push()
         for agt in range(agentsNum):
             for i in range(len(pathImg)):
@@ -296,31 +368,33 @@ while isSat == unsat:
         isSat = solver1.check()
         solver1.pop()
 
-    endtime = datetime.datetime.now()
-    print "第",t,"次",isSat,"\ttime:",(endtime - starttime).seconds,"秒"
+    dur = time() - starttime
+    print "第", t, "次", isSat, "\ttime:", ('%0.6f秒' % dur)
+
     t = t + 1
 
-
-
 pathPlan = [["" for mm in range(cols)] for nn in range(rows)]
-pattern_Agent = re.compile(r'(.+?)_t') #匹配“B_t9_x8_y8”中的"A"
-pattern_sub = re.compile(r't_[*]') #匹配除agent外的字符
-pattern_T_X_Y = re.compile(r'\d+') #匹配“B_t9_x8_y8”中的"9 8 8"三个数字
+pattern_Agent = re.compile(r'(.+?)_t')  # 匹配“B_t9_x8_y8”中的"A"
+pattern_sub = re.compile(r't_[*]')  # 匹配除agent外的字符
+pattern_T_X_Y = re.compile(r'\d+')  # 匹配“B_t9_x8_y8”中的"9 8 8"三个数字
 for n in range(len(solver1.model())):
     a = Bool(str(solver1.model()[n]))
     if (solver1.model().evaluate(a) == True):
         f.write(str(solver1.model()[n]) + " " + str(solver1.model().evaluate(a)) + "\n")
         string = str(solver1.model()[n])
         AgentName = str(pattern_Agent.findall(string)[0])
-        T_X_Y = pattern_T_X_Y.findall(str(re.findall(r"[A-Za-z0-9]+(.+)",string)))
+        T_X_Y = pattern_T_X_Y.findall(str(re.findall(r"[A-Za-z0-9]+(.+)", string)))
         # print len(pathPlan)," ",len(pathPlan[0])," ",len(pathPlan[0][0])
-        pathPlan[int(T_X_Y[1])][int(T_X_Y[2])] = str(pathPlan[int(T_X_Y[1])][int(T_X_Y[2])]) + str(AgentName) + "_" + str(T_X_Y[0]) + ","
+        pathPlan[int(T_X_Y[1])][int(T_X_Y[2])] = str(pathPlan[int(T_X_Y[1])][int(T_X_Y[2])]) + str(
+            AgentName) + "_" + str(T_X_Y[0]) + ","
 
 # f.write(str(solver1.model()))
 
 f.close()
 
-print pathPlan
+for p in pathPlan:
+
+    print p
 
 # 写入ｅｘｃｅｌ中
 file_excel = '/home/dzhb/Documents/MultiAgents_totalSat.xlsx'
@@ -330,14 +404,12 @@ style1 = xlwt.easyxf('pattern: pattern solid, fore_colour black;')
 style2 = xlwt.easyxf('pattern: pattern solid, fore_colour white;')
 for i in range(rows):
     for j in range(cols):
-        if (pathImg[i][j] != VECTEX):
-            newSheet.write(i, j, 1, style1)
+        if (pathImg[i][j] != VERTEX):
+            newSheet.write(i, j, pathPlan[i][j], style1)
         else:
             newSheet.write(i, j, pathPlan[i][j], style2)
 
-
 newfile.save(file_excel)
-
 
 list = []
 with open('test.txt', 'r') as f:
@@ -349,6 +421,3 @@ with open("gym_done.txt", "w") as f:
         f.writelines(item)
         f.writelines('\n')
     f.close()
-
-
-
